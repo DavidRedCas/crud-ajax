@@ -1,9 +1,34 @@
 {
   "compras": [
-    { "id": 1, "nombre": "Leche", "estado": "comprado" },
-    { "id": 2, "nombre": "Pan", "estado": "pendiente" },
-    { "id": 3, "nombre": "Huevos", "estado": "comprado" },
-    { "id": 4, "nombre": "Café", "estado": "pendiente" },
-    { "id": 5, "nombre": "Azúcar", "estado": "pendiente" }
+    {
+      "id": 1,
+      "nombre": "Leche",
+      "estado": "pendiente"
+    },
+    {
+      "id": 2,
+      "nombre": "Pan",
+      "estado": "pendiente"
+    },
+    {
+      "id": 3,
+      "nombre": "Huevos",
+      "estado": "pendiente"
+    },
+    {
+      "id": 4,
+      "nombre": "Café",
+      "estado": "comprado"
+    },
+    {
+      "id": 5,
+      "nombre": "Azúcar",
+      "estado": "comprado"
+    },
+    {
+      "id": "dfea",
+      "nombre": "asdasdasd",
+      "estado": "pendiente"
+    }
   ]
 }

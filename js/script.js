@@ -23,16 +23,17 @@ async function cargarCompras() {
 
 async function agregarCompra() {
     const nombre = document.getElementById("itemNombre").value;
-    if (!nombre.trim()) return alert("Ingrese un nombre válido");
+    if (nombre.trim()!=""){
+        const respuesta = await fetch("http://localhost:3000/compras", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, estado: "pendiente" })
+        });
+    
+        document.getElementById("itemNombre").value = "";
+        cargarCompras();
+    }
 
-    const respuesta = await fetch("http://localhost:3000/compras", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, estado: "pendiente" })
-    });
-
-    document.getElementById("itemNombre").value = "";
-    cargarCompras();
 }
 
 async function marcarComprado(id, estadoActual) {
