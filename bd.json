@@ -1,34 +1,29 @@
 {
   "compras": [
     {
-      "id": 1,
+      "id": "1",
       "nombre": "Leche",
       "estado": "pendiente"
     },
     {
-      "id": 2,
+      "id": "2",
       "nombre": "Pan",
       "estado": "pendiente"
     },
     {
-      "id": 3,
+      "id": "3",
       "nombre": "Huevos",
       "estado": "pendiente"
     },
     {
-      "id": 4,
+      "id": "4",
       "nombre": "Café",
       "estado": "comprado"
     },
     {
-      "id": 5,
+      "id": "5",
       "nombre": "Azúcar",
       "estado": "comprado"
-    },
-    {
-      "id": "dfea",
-      "nombre": "asdasdasd",
-      "estado": "pendiente"
     }
   ]
 }

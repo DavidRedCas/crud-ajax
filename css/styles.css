@@ -1,5 +1,5 @@
 body {
-    background-color: #121212;
+    background-color: #3f3f3f;
     color: #ffffff;
     font-family: Arial, sans-serif;
 }
@@ -47,4 +47,18 @@ body {
 .comprado {
     text-decoration: line-through;
     color: #8f8f8f;
+}
+
+.fondo-comprado{
+    background-color: #121212;
+}
+
+.lista-item .edit-icon {
+    display: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.lista-item:hover .edit-icon {
+    display: inline-block;
 }

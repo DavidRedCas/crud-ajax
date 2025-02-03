@@ -1,54 +1,100 @@
-document.addEventListener("DOMContentLoaded", cargarCompras);
+document.addEventListener("DOMContentLoaded", () => {
+    cargarCompras();
+});
 
-async function cargarCompras() {
-    const respuesta = await fetch("http://localhost:3000/compras");
-    const compras = await respuesta.json();
-    
+const API_URL = "http://localhost:3000/compras";
+
+function cargarCompras() {
+    fetch(API_URL)
+        .then(response => response.json())
+        .then(compras => {
+            compras.sort((a, b) => (a.estado === "comprado") - (b.estado === "comprado"));
+            mostrarCompras(compras);
+        })
+        .catch(error => console.error("Error cargando compras:", error));
+}
+
+function mostrarCompras(compras) {
     const lista = document.getElementById("listaCompras");
     lista.innerHTML = "";
 
-    compras.forEach(compra => {
-        const item = document.createElement("li");
-        item.className = "list-group-item d-flex justify-content-between align-items-center";
-        item.innerHTML = `
-            <span class="${compra.estado === 'comprado' ? 'comprado' : ''}">${compra.nombre}</span>
+    compras.forEach(item => {
+        const li = document.createElement("li");
+        li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center", "lista-item");
+        
+        if (item.estado === "comprado") {
+            li.classList.add("fondo-comprado", "comprado");
+        } else {
+            li.classList.add("bg-dark", "text-white");
+        }
+
+        li.innerHTML = `
+            <span>${item.nombre}
+                <span class="edit-icon" onclick="editarCompra('${item.id}')">
+                    <span class="material-symbols-outlined">edit</span>
+                </span>
+            </span>
             <div>
-                <button class="btn btn-success btn-sm" onclick="marcarComprado(${compra.id}, '${compra.estado}')"><span class="material-symbols-outlined">check</span></button>
-                <button class="btn btn-danger btn-sm" onclick="eliminarCompra(${compra.id})"><span class="material-symbols-outlined">delete</span></button>
+                <button class="btn btn-success btn-sm me-2" onclick="marcarComoComprado('${item.id}', '${item.estado}')">
+                    <span class="material-symbols-outlined">check</span>
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarCompra('${item.id}')">
+                    <span class="material-symbols-outlined">delete</span>
+                </button>
             </div>
         `;
-        lista.appendChild(item);
+        
+        lista.appendChild(li);
     });
 }
 
-async function agregarCompra() {
-    const nombre = document.getElementById("itemNombre").value;
-    if (nombre.trim()!=""){
-        const respuesta = await fetch("http://localhost:3000/compras", {
-            method: "POST",
+function editarCompra(id) {
+    const nuevoNombre = prompt("Nombre del artículo:");
+    if (nuevoNombre) {
+        fetch(`${API_URL}/${id}`, {
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nombre, estado: "pendiente" })
-        });
-    
-        document.getElementById("itemNombre").value = "";
-        cargarCompras();
+            body: JSON.stringify({ nombre: nuevoNombre })
+        })
+        .then(() => cargarCompras())
+        .catch(error => console.error("Error al editar:", error));
     }
-
 }
 
-async function marcarComprado(id, estadoActual) {
-    const nuevoEstado = estadoActual === "pendiente" ? "comprado" : "pendiente";
+function marcarComoComprado(id, estadoActual) {
+    const nuevoEstado = estadoActual === "comprado" ? "pendiente" : "comprado";
 
-    await fetch(`http://localhost:3000/compras/${id}`, {
+    fetch(`${API_URL}/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ estado: nuevoEstado })
-    });
-
-    cargarCompras();
+    })
+    .then(() => cargarCompras())
+    .catch(error => console.error("Error al actualizar:", error));
 }
 
-async function eliminarCompra(id) {
-    await fetch(`http://localhost:3000/compras/${id}`, { method: "DELETE" });
-    cargarCompras();
+function agregarCompra() {
+    const nombreInput = document.getElementById("itemNombre");
+    const nombre = nombreInput.value.trim();
+
+    if (nombre === "") return;
+
+    fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, estado: "pendiente" })
+    })
+    .then(response => response.json())
+    .then(() => {
+        nombreInput.value = "";
+        cargarCompras();
+    })
+    .catch(error => console.error("Error al agregar:", error));
+}
+
+
+function eliminarCompra(id) {
+    fetch(`${API_URL}/${id}`, { method: "DELETE" })
+        .then(() => cargarCompras())
+        .catch(error => console.error("Error al eliminar:", error));
 }
